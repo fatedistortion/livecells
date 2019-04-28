@@ -20,4 +20,8 @@ WORKDIR /var/srv/www
 
 COPY app /var/srv/www
 
+RUN chown www-data /var/srv/www
+
+USER www-data
+
 RUN composer install --prefer-dist --optimize-autoloader

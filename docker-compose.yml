@@ -25,5 +25,6 @@ services:
         volumes:
             - './app/:/var/srv/www'
             - /var/srv/www/vendor
+            - /var/srv/www/var
         env_file:
             - .env

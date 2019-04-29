@@ -1,20 +1,19 @@
 version:  '3'
 
 services:
-    mysql:
-        image: mysql:8.0
-        restart: on-failure
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: livecells
-
+    #mysql:
+    #    image: mysql:8.0
+    #    restart: on-failure
+    #    environment:
+    #        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    #        MYSQL_DATABASE: livecells
     nginx:
         image: nginx:1.15-alpine
         restart: on-failure
         depends_on:
             - php
         volumes:
-            - './app:/var/srv/www'
+            - './app:/usr/src/app'
             - './web/default.conf:/etc/nginx/conf.d/default.conf:ro'
         ports:
             - '80:80'
@@ -23,8 +22,8 @@ services:
             context: .
         restart: on-failure
         volumes:
-            - './app/:/var/srv/www'
-            - /var/srv/www/vendor
-            - /var/srv/www/var
+            - './app/:/usr/src/app'
+            - /usr/src/app/vendor
+            - /usr/src/app/var
         env_file:
             - .env

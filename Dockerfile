@@ -3,24 +3,26 @@ FROM php:7.2-fpm-alpine
 RUN apk update \
  && apk add --no-cache $PHPIZE_DEPS \
     bash \
+    zlib-dev \
     libzip-dev \
-    zip \
-    unzip
+    zip
 
-RUN docker-php-ext-install opcache pdo_mysql zip
-RUN docker-php-ext-enable opcache
-RUN docker-php-ext-configure zip --with-libzip=/usr/include
+RUN docker-php-ext-install opcache \
+    && docker-php-ext-enable opcache
+
+RUN docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-install zip
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --filename=composer \
     && php -r "unlink('composer-setup.php');" \
     && mv composer /usr/local/bin/composer
 
-WORKDIR /var/srv/www
+WORKDIR /usr/src/app
 
-COPY app /var/srv/www
+COPY app /usr/src/app
 
-RUN chown www-data /var/srv/www
+RUN chown www-data /usr/src/app
 
 USER www-data
 
